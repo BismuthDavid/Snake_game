@@ -7,10 +7,11 @@ pygame.init()
 
 WIDTH, HEIGHT = 800, 600
 GRIDSIZE = 20
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
+WHITE = (255, 255, 255)    # Background color.
+RED = (255, 0, 0)   # Food color.
+GREEN = (0, 255, 0)    # Snake color.
 
+# Movement of the snake's head.
 UP = (0, -1)
 DOWN = (0, 1)
 LEFT = (-1, 0)
@@ -19,10 +20,10 @@ RIGHT = (1, 0)
 
 class Snake:
     def __init__(self):
-        self.length = 1
-        self.positions = [((WIDTH // 2), (HEIGHT // 2))]
-        self.direction = random.choice([UP, DOWN, LEFT, RIGHT])
-        self.color = GREEN
+        self.length = 1    # Initial size of the snake.
+        self.positions = [((WIDTH // 2), (HEIGHT // 2))]    # Start from the middle of the grid.
+        self.direction = random.choice([UP, DOWN, LEFT, RIGHT])    # Randomize the direction of the start.
+        self.color = GREEN  # Set the color of the snake.
 
     def get_head_position(self):
         return self.positions[0]
@@ -73,6 +74,8 @@ def main():
     clock = pygame.time.Clock()
     snake = Snake()
     food = Food()
+    failures = 0  # Counter for failures
+
 
     while True:
         for event in pygame.event.get():
@@ -91,6 +94,9 @@ def main():
 
         snake.move()
 
+
+
+
         if snake.get_head_position() == food.position:
             snake.length += 1
             food.randomize_position()
@@ -100,6 +106,16 @@ def main():
         if (snake.get_head_position()[0] < 0 or snake.get_head_position()[0] >= WIDTH
                 or snake.get_head_position()[1] < 0 or snake.get_head_position()[1] >= HEIGHT):
             snake.reset()
+            # failures += 1
+            # if failures >= 2:  # Check if the player failed more than 2 times
+            #     screen.fill(WHITE)
+            #     font = pygame.font.Font(None, 36)
+            #     text = font.render("GAME OVER", True, RED)
+            #     text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+            #     screen.blit(text, text_rect)
+            #     pygame.display.update()
+            #     pygame.time.wait(3000)  # Display "GAME OVER" for 3 seconds
+            #     return
 
         clock.tick(10)
 
