@@ -24,6 +24,7 @@ class Snake:
         self.positions = [((WIDTH // 2), (HEIGHT // 2))]    # Start from the middle of the grid.
         self.direction = random.choice([UP, DOWN, LEFT, RIGHT])    # Randomize the direction of the start.
         self.color = GREEN  # Set the color of the snake.
+        self.failures = 0   # Set the initial number of failures to zero.
 
     def get_head_position(self):
         return self.positions[0]     # Get the position of the snake's head.
@@ -34,7 +35,20 @@ class Snake:
         new = (((cur[0] + (x * GRIDSIZE)) % WIDTH), (cur[1] + (y * GRIDSIZE)) % HEIGHT)
         # Calculate the new position of the snake's head based on the current position and direction.
         if len(self.positions) > 2 and new in self.positions[2:]:
-            self.reset()    # Reset the game if the snake collides with itself.
+            # If the snake collided with itself update the number of failures by +1.
+            self.failures += 1
+            if self.failures <= 2:  # If the player had failed less than 3 times.
+                self.reset()    # Reset the game if the snake collides with itself.
+            else:   # If the player had failed more than 3 times.
+                screen.fill(WHITE)  # Delete all items filling all the screen with white color.
+                font = pygame.font.Font(None, 36)   # Determinate the font and size.
+                text = font.render("GAME OVER", True, RED)  # Determinate the message of "game over".
+                text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))    # placing the message
+                screen.blit(text, text_rect)
+                pygame.display.update()
+                pygame.time.wait(3000)  # Display "GAME OVER" for 3 seconds
+                pygame.quit()
+                sys.exit()
         else:
             self.positions.insert(0, new)   # extend the length of the snake by 1.
             if len(self.positions) > self.length:
@@ -112,6 +126,7 @@ def main():
 
 
 if __name__ == "__main__":
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))  # Set up the game window with the specified dimensions
+    # Set up the game window with the specified dimensions
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Snake Game")  # Set the title of the game window
     main()  # Call the main function to start the game
