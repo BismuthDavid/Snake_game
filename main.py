@@ -38,6 +38,13 @@ class Snake:
             # If the snake collided with itself update the number of failures by +1.
             self.failures += 1
             if self.failures <= 2:  # If the player had failed less than 3 times.
+                screen.fill(WHITE)  # Delete all items filling all the screen with white color.
+                font = pygame.font.Font(None, 36)   # Determinate the font and size.
+                text = font.render(f"{self.failures}th fail", True, RED)  # Determinate the message of num of fail.
+                text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))    # placing the message
+                screen.blit(text, text_rect)
+                pygame.display.update()
+                pygame.time.wait(2000)
                 self.reset()    # Reset the game if the snake collides with itself.
             else:   # If the player had failed more than 3 times.
                 screen.fill(WHITE)  # Delete all items filling all the screen with white color.
