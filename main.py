@@ -10,6 +10,9 @@ GRIDSIZE = 20   # how many pixels represent every objects.
 WHITE = (255, 255, 255)    # Background color.
 RED = (255, 0, 0)   # Food color.
 GREEN = (0, 255, 0)    # Snake color.
+FONT_SIZE = 24  # Font size for displaying the number of failures
+FONT_COLOR = (0, 0, 0)  # Font color for displaying the number of failures
+
 
 # Movement of the snake's head.
 UP = (0, -1)
@@ -37,7 +40,7 @@ class Snake:
         if len(self.positions) > 2 and new in self.positions[2:]:
             # If the snake collided with itself update the number of failures by +1.
             self.failures += 1
-            if self.failures <= 2:  # If the player had failed less than 3 times.
+            if self.failures <= 3:  # If the player had failed less or equal to 3 times.
                 screen.fill(WHITE)  # Delete all items filling all the screen with white color.
                 font = pygame.font.Font(None, 36)   # Determinate the font and size.
                 text = font.render(f"{self.failures}th fail", True, RED)  # Determinate the message of num of fail.
@@ -94,6 +97,9 @@ def draw_objects(screen, snake, food):
     screen.fill(WHITE)  # Fill the entire screen with the color white.
     snake.draw(screen)  # Draw the snake on the screen.
     food.draw(screen)   # Draw the food on the screen.
+    font = pygame.font.Font(None, FONT_SIZE)  # Load a font with the specified size
+    text_surface = font.render(f"Failures: {snake.failures} from 3", True, FONT_COLOR)  # Render the text surface
+    screen.blit(text_surface, (10, 10))
     pygame.display.update()   # Update the display to show the changes.
 
 
